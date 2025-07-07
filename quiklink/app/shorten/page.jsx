@@ -38,38 +38,53 @@ export default function Shorten() {
   }
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(generated)
-      .then(() => setCopied(true));
+  try {
+    const textArea = document.createElement("textarea");
+    textArea.value = generated;
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    const success = document.execCommand("copy");
+    document.body.removeChild(textArea);
+
+    if (success) {
+      setCopied(true);
+    } else {
+      alert("Copy failed");
+    }
+  } catch (err) {
+    console.error("Fallback copy failed:", err);
   }
+};
 
   return (
-    <div className='mx-auto max-w-lg bg-purple-100 my-16 p-8 rounded-lg flex flex-col gap-4'>
+    <div className='mx-auto max-w-lg bg-[#EEF5FF] my-16 p-8 rounded-lg flex flex-col gap-4'>
       <h1 className='font-bold text-2xl'>Generate your short URLs</h1>
       <div className='flex flex-col gap-2'>
         <input
           type="text"
           value={url}
-          className='px-4 py-2 bg-white focus:outline-purple-600 rounded-md'
+          className='px-4 py-2 bg-white focus:outline-[#176B87] rounded-md'
           placeholder='Enter your URL'
           onChange={e => { setUrl(e.target.value) }} />
 
         <input
           type="text"
           value={shortUrl}
-          className='px-4 py-2 bg-white focus:outline-purple-600 rounded-md'
+          className='px-4 py-2 bg-white focus:outline-[#176B87] rounded-md'
           placeholder='Enter your preferred short URL text'
           onChange={e => { setShortUrl(e.target.value) }} />
 
-        <button onClick={generate} className='bg-[#32012F] hover:bg-[#c475c0] text-white p-2.5 rounded-xl font-semibold my-4'>Generate</button>
+        <button onClick={generate} className='bg-[#176B87] hover:bg-[#86B6F6] hover:text-gray-900 text-white p-2.5 rounded-xl font-semibold my-4'>Generate</button>
       </div>
 
       {generated && <>
         <span className='font-bold text-lg '>Your Link: </span>
         <code><br />
           <div className='flex justify-between'>
-            <Link className='flex items-center' target="_blank" href={generated}> {generated} </Link>
+            <a className='flex items-center' target='_blank' href={generated}> {generated} </a>
             <button
-              className=' bg-[#32012F] hover:bg-[#c475c0] text-white py-1 px-3 rounded-xl'
+              className=' bg-[#176B87] hover:bg-[#86B6F6] hover:text-gray-900 text-white py-1 px-3 rounded-xl'
               onClick={handleCopy}
             >
               {copied ? "Copied!" : "Copy"}
