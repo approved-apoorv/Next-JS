@@ -58,7 +58,7 @@ export default function Shorten() {
 };
 
   return (
-    <div className='mx-auto max-w-lg bg-[#EEF5FF] my-16 p-8 rounded-lg flex flex-col gap-4'>
+    <div className='mx-auto max-w-lg bg-[#EEF5FF] drop-shadow-xl my-16 p-8 rounded-lg flex flex-col gap-4'>
       <h1 className='font-bold text-2xl'>Generate your short URLs</h1>
       <div className='flex flex-col gap-2'>
         <input
@@ -75,7 +75,7 @@ export default function Shorten() {
           placeholder='Enter your preferred short URL text'
           onChange={e => { setShortUrl(e.target.value) }} />
 
-        <button onClick={generate} className='bg-[#176B87] hover:bg-[#86B6F6] hover:text-gray-900 text-white p-2.5 rounded-xl font-semibold my-4'>Generate</button>
+        <button onClick={generate} className='bg-[#176B87] hover:bg-[#86B6F6] hover:drop-shadow-xl hover:text-gray-900 text-white p-2.5 rounded-xl font-semibold my-4'>Generate</button>
       </div>
 
       {generated && <>
