@@ -6,7 +6,7 @@ export default function Shorten() {
   const [url, setUrl] = useState("")
   const [shortUrl, setShortUrl] = useState("")
   const [generated, setGenerated] = useState(false)
-  const [copied, setCopied] = useState(false) 
+  const [copied, setCopied] = useState(false)
 
   const generate = () => {
     const myHeaders = new Headers();
@@ -30,7 +30,7 @@ export default function Shorten() {
         setGenerated(`${process.env.NEXT_PUBLIC_HOST}/${shortUrl}`)
         setUrl("")
         setShortUrl("")
-        setCopied(false) 
+        setCopied(false)
         console.log(setShortUrl)
         alert(result.message)
       })
@@ -38,45 +38,51 @@ export default function Shorten() {
   }
 
   const handleCopy = () => {
-  try {
-    const textArea = document.createElement("textarea");
-    textArea.value = generated;
-    document.body.appendChild(textArea);
-    textArea.focus();
-    textArea.select();
-    const success = document.execCommand("copy");
-    document.body.removeChild(textArea);
+    try {
+      const textArea = document.createElement("textarea");
+      textArea.value = generated;
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      const success = document.execCommand("copy");
+      document.body.removeChild(textArea);
 
-    if (success) {
-      setCopied(true);
-    } else {
-      alert("Copy failed");
+      if (success) {
+        setCopied(true);
+      } else {
+        alert("Copy failed");
+      }
+    } catch (err) {
+      console.error("Fallback copy failed:", err);
     }
-  } catch (err) {
-    console.error("Fallback copy failed:", err);
-  }
-};
+  };
 
   return (
     <div className='mx-auto max-w-lg bg-[#EEF5FF] drop-shadow-xl my-16 p-8 rounded-lg flex flex-col gap-4'>
       <h1 className='font-bold text-2xl'>Generate your short URLs</h1>
-      <div className='flex flex-col gap-2'>
-        <input
-          type="text"
-          value={url}
-          className='px-4 py-2 bg-white focus:outline-[#176B87] rounded-md'
-          placeholder='Enter your URL'
-          onChange={e => { setUrl(e.target.value) }} />
+        <div className='flex flex-col gap-2'>
+          <input
+            type="text"
+            value={url}
+            className='px-4 py-2 bg-white focus:outline-[#176B87] rounded-md'
+            placeholder='Enter your URL'
+            required
+            minLength="8"
+            onChange={e => { setUrl(e.target.value) }} />
 
-        <input
-          type="text"
-          value={shortUrl}
-          className='px-4 py-2 bg-white focus:outline-[#176B87] rounded-md'
-          placeholder='Enter your preferred short URL text'
-          onChange={e => { setShortUrl(e.target.value) }} />
+          <input
+            type="text"
+            value={shortUrl}
+            className='px-4 py-2 bg-white focus:outline-[#176B87] rounded-md'
+            placeholder='Enter your preferred short URL text'
+            required
+            minLength="1"
+            onChange={e => { setShortUrl(e.target.value) }} />
 
-        <button onClick={generate} className='bg-[#176B87] hover:bg-[#86B6F6] hover:drop-shadow-xl hover:text-gray-900 text-white p-2.5 rounded-xl font-semibold my-4'>Generate</button>
-      </div>
+          <button type="submit" onClick={generate}
+            disabled={url.trim().length < 8 || shortUrl.trim().length < 1} 
+            className='bg-[#176B87] hover:bg-[#86B6F6] hover:drop-shadow-xl hover:text-gray-900 text-white p-2.5 rounded-xl font-semibold my-4'>Generate</button>
+        </div>
 
       {generated && <>
         <span className='font-bold text-lg '>Your Link: </span>
@@ -91,9 +97,9 @@ export default function Shorten() {
             </button>
           </div>
         </code>
-        
+
       </>}
 
-      </div >
-      )
+    </div >
+  )
 }
